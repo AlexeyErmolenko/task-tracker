@@ -29,7 +29,12 @@ func handle(conf *config) {
 
 	defer file.Close()
 
-	command.Callback(args, file)
+	err = command.Callback(args[2:], file)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 }
 
 func getCommand(args []string) (commands.Command, bool) {
@@ -51,7 +56,7 @@ func getFile(filePath string) (*os.File, error) {
 			return &os.File{}, err
 		}
 
-		_, err = file.Write([]byte("{}"))
+		_, err = file.Write([]byte("[]"))
 
 		if err != nil {
 			return file, err
