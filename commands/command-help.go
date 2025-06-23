@@ -1,8 +1,11 @@
 package commands
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
-func handleHelp(args []string) error {
+func handleHelp(args []string, file *os.File) error {
 	showHelp()
 
 	return nil

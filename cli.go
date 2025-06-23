@@ -20,7 +20,16 @@ func handle(conf *config) {
 		return
 	}
 
-	command.Callback(args)
+	file, err := getFile(conf.fileName)
+
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	defer file.Close()
+
+	command.Callback(args, file)
 }
 
 func getCommand(args []string) (commands.Command, bool) {
@@ -32,4 +41,32 @@ func getCommand(args []string) (commands.Command, bool) {
 	command, ok := commannds[args[1]]
 
 	return command, ok
+}
+
+func getFile(filePath string) (*os.File, error) {
+	if !fileExists(filePath) {
+		file, err := os.Create(filePath)
+
+		if err != nil {
+			return &os.File{}, err
+		}
+
+		_, err = file.Write([]byte("{}"))
+
+		if err != nil {
+			return file, err
+		}
+
+		file.Close()
+	}
+
+	file, err := os.OpenFile(filePath, os.O_RDWR, 0666)
+
+	return file, err
+}
+
+func fileExists(filePath string) bool {
+	_, err := os.Stat(filePath)
+
+	return err == nil
 }

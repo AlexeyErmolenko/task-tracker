@@ -1,9 +1,11 @@
 package commands
 
+import "os"
+
 type Command struct {
 	Name        string
 	Description string
-	Callback    func([]string) error
+	Callback    func([]string, *os.File) error
 }
 
 func GetCommands() map[string]Command {
