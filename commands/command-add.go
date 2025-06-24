@@ -25,9 +25,16 @@ func handleAdd(args []string, file *os.File) error {
 		lastID = lastTask.ID
 	}
 
-	*tasks = append(*tasks, createTask(args, lastID))
+	task := createTask(args, lastID)
+	*tasks = append(*tasks, task)
 
-	return saveTasks(file, tasks)
+	if err = saveTasks(file, tasks); err != nil {
+		return err
+	}
+
+	fmt.Printf("task added successfully (ID: %d)\n", task.ID)
+
+	return nil
 }
 
 func createTask(args []string, lastID int) task {
@@ -36,6 +43,7 @@ func createTask(args []string, lastID int) task {
 	return task{
 		ID:          lastID + 1,
 		Description: strings.Join(args, " "),
+		Status:      StatusToDo,
 		CreatedAt:   now,
 		UpdatedAt:   now,
 	}
