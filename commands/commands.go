@@ -14,9 +14,16 @@ type Command struct {
 type task struct {
 	ID          int
 	Description string
+	Status      int
 	CreatedAt   string
 	UpdatedAt   string
 }
+
+const (
+	StatusToDo = iota
+	StatusInProgress
+	StatusDone
+)
 
 func GetCommands() map[string]Command {
 	return map[string]Command{
@@ -29,6 +36,11 @@ func GetCommands() map[string]Command {
 			Name:        "add",
 			Description: "Add new task",
 			Callback:    handleAdd,
+		},
+		"update": {
+			Name:        "update",
+			Description: "Update a task",
+			Callback:    handleUpdate,
 		},
 	}
 }
