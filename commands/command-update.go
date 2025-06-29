@@ -3,20 +3,15 @@ package commands
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
 
 func handleUpdate(args []string, file *os.File) error {
-	if len(args) < 1 {
-		return fmt.Errorf("please input ID of the task")
-	}
-
-	id, err := strconv.Atoi(args[0])
+	id, err := getID(args)
 
 	if err != nil {
-		return fmt.Errorf("task ID should be a number")
+		return err
 	}
 
 	if len(args) < 2 {

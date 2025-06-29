@@ -2,7 +2,9 @@ package commands
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"strconv"
 )
 
 type Command struct {
@@ -42,6 +44,11 @@ func GetCommands() map[string]Command {
 			Description: "Update a task",
 			Callback:    handleUpdate,
 		},
+		"delete": {
+			Name:        "delete",
+			Description: "Delete a task",
+			Callback:    handleDelete,
+		},
 	}
 }
 
@@ -75,4 +82,18 @@ func saveTasks(file *os.File, tasks *[]task) error {
 	_, err = file.Write(jsonData)
 
 	return err
+}
+
+func getID(args []string) (int, error) {
+	if len(args) < 1 {
+		return 0, fmt.Errorf("please input ID of the task")
+	}
+
+	id, err := strconv.Atoi(args[0])
+
+	if err != nil {
+		return 0, fmt.Errorf("task ID should be a number")
+	}
+
+	return id, nil
 }
